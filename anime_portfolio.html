@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thái Phương Trường - Anime Portfolio & Developer</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        anime: {
+                            pink: '#ff758c',
+                            purple: '#7f7fd5',
+                            cyan: '#00f2fe',
+                            dark: '#0f0c1b',
+                            card: 'rgba(25, 20, 45, 0.75)',
+                            border: 'rgba(255, 117, 140, 0.3)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        anime: ['Orbitron', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0914;
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(20, 15, 35, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 117, 140, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-card {
+            background: rgba(30, 22, 55, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(255, 117, 140, 0.6);
+            box-shadow: 0 0 25px rgba(255, 117, 140, 0.3);
+            transform: translateY(-5px);
+        }
+
+        /* Neon Glow Effects */
+        .neon-text-pink {
+            text-shadow: 0 0 10px rgba(255, 117, 140, 0.8), 0 0 20px rgba(255, 117, 140, 0.4);
+        }
+        .neon-text-cyan {
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.8), 0 0 20px rgba(0, 242, 254, 0.4);
+        }
+        .neon-border {
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1deg); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Starry Background Canvas */
+        #star-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Manga Panel Frame */
+        .manga-panel {
+            position: relative;
+            border: 3px solid #ff758c;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, rgba(20,15,35,0.9), rgba(40,25,70,0.9));
+            overflow: hidden;
+        }
+        .manga-panel::before {
+            content: "CHAPTER 01";
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #ff758c;
+            color: #0b0914;
+            font-size: 0.75rem;
+            font-weight: 900;
+            padding: 2px 10px;
+            border-bottom-left-radius: 0.75rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* RPG Status Bar Animation */
+        @keyframes hpGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+        .rpg-bar {
+            animation: hpGlow 2.5s infinite;
+        }
+    </style>
+</head>
+<body class="selection:bg-anime-pink selection:text-white">
+
+    <!-- Starry Particle Canvas -->
+    <canvas id="star-canvas"></canvas>
+
+    <!-- Header Navigation -->
+    <header class="fixed top-0 left-0 w-full z-50 glass-panel border-b border-anime-pink/20 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#hero" class="text-xl sm:text-2xl font-black tracking-wider font-anime flex items-center gap-3 group">
+                <span class="w-10 h-10 rounded-xl bg-gradient-to-tr from-anime-pink to-anime-cyan text-anime-dark flex items-center justify-center shadow-lg shadow-anime-cyan/30 group-hover:rotate-12 transition-transform">
+                    <i class="fa-solid fa-gamepad text-lg"></i>
+                </span>
+                <span class="bg-gradient-to-r from-anime-pink via-anime-cyan to-white bg-clip-text text-transparent">
+                    TRUONG.TP
+                </span>
+            </a>
+
+            <!-- Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 font-medium text-sm">
+                <a href="#about" class="hover:text-anime-cyan transition-colors flex items-center gap-1.5"><i class="fa-solid fa-user-ninja text-xs text-anime-pink"></i> Giới Thiệu</a>
+                <a href="#skills" class="hover:text-anime-cyan transition-colors flex items-center gap-1.5"><i class="fa-solid fa-bolt text-xs text-anime-pink"></i> Kỹ Năng (RPG)</a>
+                <a href="#projects" class="hover:text-anime-cyan transition-colors flex items-center gap-1.5"><i class="fa-solid fa-book-open text-xs text-anime-pink"></i> Dự Án</a>
+                <a href="#contact" class="hover:text-anime-cyan transition-colors flex items-center gap-1.5"><i class="fa-solid fa-comments text-xs text-anime-pink"></i> Liên Hệ</a>
+            </nav>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-4">
+                <button id="bgm-toggle" class="px-3.5 py-2 rounded-xl glass-card text-anime-cyan hover:text-white text-xs font-bold flex items-center gap-2 transition-all border border-anime-cyan/30">
+                    <i class="fa-solid fa-volume-xmark" id="audio-icon"></i>
+                    <span class="hidden sm:inline" id="audio-text">BGM: OFF</span>
+                </button>
+                <a href="#contact" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-anime-pink to-anime-purple text-white font-bold text-sm shadow-lg shadow-anime-pink/30 hover:scale-105 transition-all">
+                    Start Quest
+                </a>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-anime-cyan focus:outline-none">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-anime-pink/20 px-4 pt-3 pb-6 space-y-3">
+            <a href="#about" class="mobile-link block px-3 py-2 rounded-lg hover:bg-anime-purple/20 font-medium">Giới Thiệu</a>
+            <a href="#skills" class="mobile-link block px-3 py-2 rounded-lg hover:bg-anime-purple/20 font-medium">Kỹ Năng (RPG)</a>
+            <a href="#projects" class="mobile-link block px-3 py-2 rounded-lg hover:bg-anime-purple/20 font-medium">Dự Án</a>
+            <a href="#contact" class="mobile-link block px-3 py-2 rounded-lg hover:bg-anime-purple/20 font-medium">Liên Hệ</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-20">
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-[calc(100vh-5rem)] flex items-center justify-center relative py-16 overflow-hidden">
+            <!-- Glowing Background Orbs -->
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-anime-pink/15 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+            <div class="absolute bottom-10 right-1/4 w-96 h-96 bg-anime-cyan/15 rounded-full blur-3xl pointer-events-none animate-pulse" style="animation-delay: 1s;"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid md:grid-cols-2 gap-12 items-center relative z-10">
+                <!-- Text Intro -->
+                <div class="space-y-6 text-center md:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card border border-anime-pink/40 text-anime-pink text-xs font-bold tracking-wider">
+                        <span class="w-2 h-2 rounded-full bg-anime-cyan animate-ping"></span>
+                        <span>[ SYSTEM MESSAGE: WELCOME PLAYER ]</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-6xl font-black tracking-tight font-anime leading-tight">
+                        Xin chào, tôi là <br>
+                        <span class="bg-gradient-to-r from-anime-pink via-anime-cyan to-white bg-clip-text text-transparent neon-text-pink">
+                            Thái Phương Trường
+                        </span>
+                    </h1>
+
+                    <p class="text-slate-300 text-base sm:text-lg max-w-xl mx-auto md:mx-0 leading-relaxed font-normal">
+                        Một <span class="text-anime-cyan font-bold">Full-stack Developer</span> kiêm Otaku chính hiệu. Đam mê chuyển hóa các ý tưởng phức tạp thành các dòng code mượt mà, giao diện anime cyberpunk độc đáo và trải nghiệm người dùng đỉnh cao.
+                    </p>
+
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-2">
+                        <a href="#projects" class="px-7 py-3.5 rounded-xl bg-gradient-to-r from-anime-pink to-anime-purple hover:brightness-110 text-white font-bold font-anime shadow-lg shadow-anime-pink/40 transition-all hover:-translate-y-0.5">
+                            <i class="fa-solid fa-rocket mr-2"></i> Khám Phá Kho Tàng
+                        </a>
+                        <a href="#contact" class="px-7 py-3.5 rounded-xl glass-card text-anime-cyan hover:text-white font-bold font-anime border border-anime-cyan/40 transition-all hover:-translate-y-0.5">
+                            <i class="fa-solid fa-paper-plane mr-2"></i> Gửi Thư Thách Thức
+                        </a>
+                    </div>
+
+                    <!-- Social Media Badges -->
+                    <div class="flex items-center justify-center md:justify-start gap-3 pt-4">
+                        <a href="#" class="w-11 h-11 rounded-xl glass-card flex items-center justify-center text-anime-pink hover:text-white hover:border-anime-pink transition-all" title="GitHub">
+                            <i class="fa-brands fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="w-11 h-11 rounded-xl glass-card flex items-center justify-center text-anime-cyan hover:text-white hover:border-anime-cyan transition-all" title="Discord">
+                            <i class="fa-brands fa-discord text-xl"></i>
+                        </a>
+                        <a href="#" class="w-11 h-11 rounded-xl glass-card flex items-center justify-center text-purple-400 hover:text-white hover:border-purple-400 transition-all" title="Facebook">
+                            <i class="fa-brands fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="#" class="w-11 h-11 rounded-xl glass-card flex items-center justify-center text-pink-400 hover:text-white hover:border-pink-400 transition-all" title="Instagram">
+                            <i class="fa-brands fa-instagram text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Avatar & Chibi Graphic -->
+                <div class="flex justify-center relative">
+                    <div class="w-72 h-72 sm:w-88 sm:h-88 relative animate-float">
+                        <div class="absolute inset-0 rounded-3xl bg-gradient-to-tr from-anime-pink via-anime-purple to-anime-cyan opacity-40 blur-xl"></div>
+                        <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=800&q=80" 
+                             alt="Thái Phương Trường" 
+                             class="w-full h-full object-cover rounded-3xl shadow-2xl relative z-10 border-2 border-anime-cyan/50"
+                             onerror="this.src='https://placehold.co/400x400/1e1637/00f2fe?text=Truong.TP'">
+                        <!-- Floating Badge -->
+                        <div class="absolute -bottom-4 -right-4 z-20 glass-panel px-4 py-2 rounded-2xl border border-anime-pink/50 shadow-xl flex items-center gap-3">
+                            <div class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></div>
+                            <span class="text-xs font-anime font-bold text-white">LV. 99 DEVELOPER</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="py-20 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-anime-pink font-anime text-xs uppercase tracking-widest block mb-2">[ PROFILE DATA ]</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold font-anime neon-text-cyan">Hành Trình & Tiểu Sử</h2>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <!-- Manga Panel Illustration Card -->
+                    <div class="manga-panel p-6 sm:p-8 space-y-6 shadow-2xl">
+                        <div class="flex items-center justify-between border-b border-anime-pink/30 pb-4">
+                            <span class="font-anime font-bold text-anime-pink tracking-wide">CHARACTER STATS</span>
+                            <span class="text-xs text-slate-400 font-mono">ID: #TPT-2026</span>
+                        </div>
+                        <ul class="space-y-4 text-sm text-slate-300">
+                            <li class="flex justify-between items-center bg-slate-900/50 p-3 rounded-xl border border-anime-cyan/10">
+                                <span class="text-slate-400 font-medium"><i class="fa-solid fa-user text-anime-cyan mr-2"></i>Họ và tên:</span>
+                                <span class="font-bold text-white font-anime">Thái Phương Trường</span>
+                            </li>
+                            <li class="flex justify-between items-center bg-slate-900/50 p-3 rounded-xl border border-anime-cyan/10">
+                                <span class="text-slate-400 font-medium"><i class="fa-solid fa-briefcase text-anime-cyan mr-2"></i>Class:</span>
+                                <span class="font-bold text-anime-pink">Full-stack Software Engineer</span>
+                            </li>
+                            <li class="flex justify-between items-center bg-slate-900/50 p-3 rounded-xl border border-anime-cyan/10">
+                                <span class="text-slate-400 font-medium"><i class="fa-solid fa-location-dot text-anime-cyan mr-2"></i>Location:</span>
+                                <span class="font-bold text-white">Việt Nam</span>
+                            </li>
+                            <li class="flex justify-between items-center bg-slate-900/50 p-3 rounded-xl border border-anime-cyan/10">
+                                <span class="text-slate-400 font-medium"><i class="fa-solid fa-heart text-anime-cyan mr-2"></i>Hobby:</span>
+                                <span class="font-bold text-anime-cyan">Coding, Anime, Gaming, Manga</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Bio Text -->
+                    <div class="space-y-6 text-slate-300 leading-relaxed">
+                        <h3 class="text-2xl font-bold font-anime text-white flex items-center gap-2">
+                            <i class="fa-solid fa-wand-magic-sparkles text-anime-pink"></i> Sức mạnh & Đam mê
+                        </h3>
+                        <p class="text-base">
+                            Chào bạn, mình là <span class="text-anime-cyan font-bold">Thái Phương Trường</span>! Mình xem mỗi dòng code như một câu thần chú trong thế giới ảo thuật, nơi tư duy logic hòa quyện cùng trí tưởng tượng để xây dựng nên những ứng dụng mượt mà và trực quan nhất.
+                        </p>
+                        <p class="text-base">
+                            Với nhiều năm kinh nghiệm nghiên cứu và phát triển web, mình luôn đặt tâm huyết vào từng chi tiết giao diện, tối ưu hóa trải nghiệm người dùng theo phong cách thẩm mỹ cao giống như những bộ anime bom tấn.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 pt-2">
+                            <div class="glass-card p-4 rounded-2xl text-center">
+                                <span class="block text-3xl font-black font-anime text-anime-pink mb-1">20+</span>
+                                <span class="text-xs text-slate-400 font-medium">Dự án hoàn thành</span>
+                            </div>
+                            <div class="glass-card p-4 rounded-2xl text-center">
+                                <span class="block text-3xl font-black font-anime text-anime-cyan mb-1">100%</span>
+                                <span class="text-xs text-slate-400 font-medium">Sự nhiệt huyết</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section (RPG Status Bar) -->
+        <section id="skills" class="py-20 bg-slate-950/40 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-anime-cyan font-anime text-xs uppercase tracking-widest block mb-2">[ SKILL TREE & STATUS ]</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold font-anime neon-text-pink">Bảng Năng Lực (HP / MP Bar)</h2>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Tech Stack / Mana Bar Card -->
+                    <div class="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
+                        <h3 class="text-xl font-bold font-anime text-white flex items-center gap-2">
+                            <i class="fa-solid fa-code text-anime-pink"></i> Công Nghệ Lập Trình (Mana Skills)
+                        </h3>
+
+                        <!-- Skill 1 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm font-anime">
+                                <span class="text-slate-200">HTML5 / CSS3 / Tailwind CSS</span>
+                                <span class="text-anime-cyan font-bold">MP: 98/100</span>
+                            </div>
+                            <div class="w-full bg-slate-900 rounded-full h-3.5 p-0.5 border border-anime-cyan/30">
+                                <div class="bg-gradient-to-r from-anime-cyan to-anime-purple h-full rounded-full rpg-bar" style="width: 98%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Skill 2 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm font-anime">
+                                <span class="text-slate-200">JavaScript / TypeScript / React</span>
+                                <span class="text-anime-pink font-bold">MP: 92/100</span>
+                            </div>
+                            <div class="w-full bg-slate-900 rounded-full h-3.5 p-0.5 border border-anime-pink/30">
+                                <div class="bg-gradient-to-r from-anime-pink to-purple-500 h-full rounded-full rpg-bar" style="width: 92%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Skill 3 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm font-anime">
+                                <span class="text-slate-200">Node.js / Express / Backend</span>
+                                <span class="text-amber-400 font-bold">MP: 85/100</span>
+                            </div>
+                            <div class="w-full bg-slate-900 rounded-full h-3.5 p-0.5 border border-amber-400/30">
+                                <div class="bg-gradient-to-r from-amber-500 to-orange-500 h-full rounded-full rpg-bar" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Design & Soft Skills -->
+                    <div class="glass-panel p-6 sm:p-8 rounded-3xl space-y-6">
+                        <h3 class="text-xl font-bold font-anime text-white flex items-center gap-2">
+                            <i class="fa-solid fa-palette text-anime-cyan"></i> Sáng Tạo & Kỹ Năng Mềm (Special Spells)
+                        </h3>
+
+                        <!-- Skill 4 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm font-anime">
+                                <span class="text-slate-200">UI/UX Design (Figma)</span>
+                                <span class="text-anime-pink font-bold">HP: 90/100</span>
+                            </div>
+                            <div class="w-full bg-slate-900 rounded-full h-3.5 p-0.5 border border-anime-pink/30">
+                                <div class="bg-gradient-to-r from-anime-pink to-pink-600 h-full rounded-full rpg-bar" style="width: 90%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Skill 5 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm font-anime">
+                                <span class="text-slate-200">Problem Solving & Debugging</span>
+                                <span class="text-anime-cyan font-bold">HP: 95/100</span>
+                            </div>
+                            <div class="w-full bg-slate-900 rounded-full h-3.5 p-0.5 border border-anime-cyan/30">
+                                <div class="bg-gradient-to-r from-anime-cyan to-blue-600 h-full rounded-full rpg-bar" style="width: 95%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Skill 6 -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm font-anime">
+                                <span class="text-slate-200">Teamwork & Communication</span>
+                                <span class="text-emerald-400 font-bold">HP: 88/100</span>
+                            </div>
+                            <div class="w-full bg-slate-900 rounded-full h-3.5 p-0.5 border border-emerald-400/30">
+                                <div class="bg-gradient-to-r from-emerald-400 to-teal-500 h-full rounded-full rpg-bar" style="width: 88%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section (Manga Panel Layout) -->
+        <section id="projects" class="py-20 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-anime-pink font-anime text-xs uppercase tracking-widest block mb-2">[ QUEST LOG ]</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold font-anime neon-text-cyan">Dự Án Nổi Bật</h2>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Project 1 -->
+                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col group border border-anime-cyan/20">
+                        <div class="relative h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80" alt="Cyberpunk Web App" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/1e1637/ff758c?text=Cyberpunk+App'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent flex items-end p-4">
+                                <span class="text-xs font-anime font-bold text-anime-cyan bg-slate-900/80 px-3 py-1 rounded-full border border-anime-cyan/40">QUEST #01</span>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                            <div>
+                                <h3 class="text-xl font-bold font-anime text-white mb-2 group-hover:text-anime-pink transition-colors">Cyberpunk Anime Dashboard</h3>
+                                <p class="text-slate-300 text-sm leading-relaxed">Nền tảng quản lý thời gian thực theo chủ đề anime tương lai với giao diện rực rỡ và tối ưu trải nghiệm.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded-md bg-anime-purple/20 text-anime-cyan text-xs font-mono border border-anime-cyan/30">React</span>
+                                <span class="px-2.5 py-1 rounded-md bg-anime-purple/20 text-anime-pink text-xs font-mono border border-anime-pink/30">Tailwind</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 2 -->
+                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col group border border-anime-cyan/20">
+                        <div class="relative h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" alt="Manga Reader App" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/1e1637/00f2fe?text=Manga+App'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent flex items-end p-4">
+                                <span class="text-xs font-anime font-bold text-anime-pink bg-slate-900/80 px-3 py-1 rounded-full border border-anime-pink/40">QUEST #02</span>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                            <div>
+                                <h3 class="text-xl font-bold font-anime text-white mb-2 group-hover:text-anime-cyan transition-colors">Otaku Manga Web Reader</h3>
+                                <p class="text-slate-300 text-sm leading-relaxed">Trang web đọc truyện tranh trực tuyến mượt mà, lưu lịch sử đọc và đồng bộ thông minh qua cloud.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded-md bg-anime-purple/20 text-anime-cyan text-xs font-mono border border-anime-cyan/30">JavaScript</span>
+                                <span class="px-2.5 py-1 rounded-md bg-anime-purple/20 text-anime-pink text-xs font-mono border border-anime-pink/30">Node.js</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 -->
+                    <div class="glass-card rounded-3xl overflow-hidden flex flex-col group border border-anime-cyan/20">
+                        <div class="relative h-52 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80" alt="RPG Game Portfolio" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/1e1637/7f7fd5?text=RPG+Game'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent flex items-end p-4">
+                                <span class="text-xs font-anime font-bold text-purple-400 bg-slate-900/80 px-3 py-1 rounded-full border border-purple-400/40">QUEST #03</span>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                            <div>
+                                <h3 class="text-xl font-bold font-anime text-white mb-2 group-hover:text-anime-pink transition-colors">Anime RPG Character Builder</h3>
+                                <p class="text-slate-300 text-sm leading-relaxed">Công cụ thiết kế nhân vật phong cách game Nhật Bản với tùy chỉnh trang phục và hiệu ứng đặc biệt.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded-md bg-anime-purple/20 text-anime-cyan text-xs font-mono border border-anime-cyan/30">TypeScript</span>
+                                <span class="px-2.5 py-1 rounded-md bg-anime-purple/20 text-anime-pink text-xs font-mono border border-anime-pink/30">Canvas API</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section (RPG Dialogue Box Form) -->
+        <section id="contact" class="py-20 bg-slate-950/40 relative">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-anime-cyan font-anime text-xs uppercase tracking-widest block mb-2">[ NPC INTERACTION ]</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold font-anime neon-text-pink">Gửi Thư Thách Thức</h2>
+                </div>
+
+                <!-- RPG Dialogue Box -->
+                <div class="glass-panel p-8 sm:p-10 rounded-3xl border-2 border-anime-pink/50 relative shadow-2xl">
+                    <div class="absolute -top-4 left-8 bg-anime-pink text-anime-dark font-anime font-bold text-xs px-4 py-1.5 rounded-full shadow-lg">
+                        DIALOGUE BOX: THÁI PHƯƠNG TRƯỜNG
+                    </div>
+
+                    <!-- Custom Alert Box -->
+                    <div id="form-alert" class="hidden p-4 rounded-xl text-sm font-medium mb-6"></div>
+
+                    <form id="rpg-form" class="space-y-6 pt-4">
+                        <div class="grid sm:grid-cols-2 gap-6">
+                            <div>
+                                <label for="npc-name" class="block text-sm font-anime font-medium mb-2 text-anime-cyan">Tên Người Chơi (Name) *</label>
+                                <input type="text" id="npc-name" required class="w-full px-4 py-3.5 rounded-xl bg-slate-900/80 border border-anime-cyan/30 text-white focus:outline-none focus:border-anime-pink transition-colors font-medium text-sm" placeholder="Nhập tên của bạn...">
+                            </div>
+                            <div>
+                                <label for="npc-email" class="block text-sm font-anime font-medium mb-2 text-anime-cyan">Hộp Thư (Email) *</label>
+                                <input type="email" id="npc-email" required class="w-full px-4 py-3.5 rounded-xl bg-slate-900/80 border border-anime-cyan/30 text-white focus:outline-none focus:border-anime-pink transition-colors font-medium text-sm" placeholder="player@example.com">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="npc-quest" class="block text-sm font-anime font-medium mb-2 text-anime-cyan">Nội Dung Quest / Tin Nhắn *</label>
+                            <textarea id="npc-quest" rows="4" required class="w-full px-4 py-3.5 rounded-xl bg-slate-900/80 border border-anime-cyan/30 text-white focus:outline-none focus:border-anime-pink transition-colors font-medium text-sm" placeholder="Nhập yêu cầu dự án hoặc lời nhắn cho Thái Phương Trường..."></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-anime-pink via-anime-purple to-anime-cyan hover:brightness-110 text-white font-bold font-anime text-base shadow-lg shadow-anime-pink/30 transition-all flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>GỬI THƯ ĐẾN THÁI PHƯƠNG TRƯỜNG</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-anime-pink/20 bg-slate-950 py-8 text-center text-xs text-slate-400 font-anime">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-2">
+            <p>© 2026 THÁI PHƯƠNG TRƯỜNG. ALL RIGHTS RESERVED.</p>
+            <p class="text-anime-cyan">Crafted with Anime Vibe, Tailwind CSS & Passion.</p>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        // --- 1. Starry Particle Background Canvas ---
+        const canvas = document.getElementById('star-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let stars = [];
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        for (let i = 0; i < 100; i++) {
+            stars.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                radius: Math.random() * 1.5,
+                alpha: Math.random(),
+                speed: Math.random() * 0.2 + 0.05
+            });
+        }
+
+        function animateStars() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#ffffff';
+            
+            stars.forEach(star => {
+                ctx.globalAlpha = star.alpha;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                star.y -= star.speed;
+                if (star.y < 0) {
+                    star.y = height;
+                    star.x = Math.random() * width;
+                }
+
+                star.alpha += (Math.random() - 0.5) * 0.05;
+                if (star.alpha < 0.1) star.alpha = 0.1;
+                if (star.alpha > 1) star.alpha = 1;
+            });
+
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
+
+        // --- 2. Mobile Menu Toggle ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // --- 3. RPG Dialogue Form Validation & Message Box ---
+        const rpgForm = document.getElementById('rpg-form');
+        const formAlert = document.getElementById('form-alert');
+
+        rpgForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('npc-name').value.trim();
+            const email = document.getElementById('npc-email').value.trim();
+            const quest = document.getElementById('npc-quest').value.trim();
+
+            if (!name || !email || !quest) {
+                formAlert.className = "p-4 rounded-xl text-sm font-medium bg-red-950/80 text-red-300 border border-red-500/40 block font-anime";
+                formAlert.textContent = "[ SYSTEM ERROR ]: Vui lòng điền đầy đủ các thông tin bắt buộc!";
+                return;
+            }
+
+            formAlert.className = "p-4 rounded-xl text-sm font-medium bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 block font-anime";
+            formAlert.textContent = "[ QUEST ACCEPTED ]: Thư của bạn đã được gửi thành công đến Thái Phương Trường! Xin cảm ơn nhà thám hiểm.";
+            
+            rpgForm.reset();
+
+            setTimeout(() => {
+                formAlert.classList.add('hidden');
+            }, 6000);
+        });
+
+        // --- 4. BGM Audio Toggle Simulator ---
+        const bgmToggle = document.getElementById('bgm-toggle');
+        const audioIcon = document.getElementById('audio-icon');
+        const audioText = document.getElementById('audio-text');
+        let isPlaying = false;
+
+        bgmToggle.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                audioIcon.className = "fa-solid fa-volume-high text-anime-pink animate-pulse";
+                audioText.textContent = "BGM: ON";
+            } else {
+                audioIcon.className = "fa-solid fa-volume-xmark";
+                audioText.textContent = "BGM: OFF";
+            }
+        });
+    </script>
+</body>
+</html>
